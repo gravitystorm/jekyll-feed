@@ -585,6 +585,13 @@ describe(JekyllFeed) do
         expect(tags_feed_success).to_not match "/2015/05/12/pre.html"
         expect(tags_feed_success).to_not match "/2015/08/08/stuck-in-the-middle.html"
       end
+
+      it "should slugify tags" do
+        expect(Pathname.new(dest_dir("feed/by_tag/apple.xml"))).to exist
+        expect(Pathname.new(dest_dir("feed/by_tag/banana-smoothie.xml"))).to exist
+        expect(Pathname.new(dest_dir("feed/by_tag/cherry-pie.xml"))).to exist
+        expect(Pathname.new(dest_dir("feed/by_tag/date-pudding.xml"))).to exist
+      end
     end
 
     context "set exclusions" do

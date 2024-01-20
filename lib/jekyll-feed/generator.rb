@@ -89,15 +89,13 @@ module JekyllFeed
 
     def generate_tag_feed(tags_pool, tags_path)
       tags_pool.each do |tag|
-        # allow only tags with basic alphanumeric characters and underscore to keep
-        # feed path simple.
-        next if %r![^a-zA-Z0-9_]!.match?(tag)
+        tag_slug = Jekyll::Utils.slugify(tag)
 
         Jekyll.logger.info "Jekyll Feed:", "Generating feed for posts tagged #{tag}"
         path = if tags_path.include?("%{tag}") # rubocop:disable Style/FormatStringToken
-                 format(tags_path, :tag => tag)
+                 format(tags_path, :tag => tag_slug)
                else
-                 "#{tags_path}#{tag}.xml" # backwards compatibility for custom paths
+                 "#{tags_path}#{tag_slug}.xml" # backwards compatibility for custom paths
                end
         next if file_exists?(path)
 
