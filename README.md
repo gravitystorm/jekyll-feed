@@ -226,7 +226,7 @@ feed:
       - another-tag
 ```
 
-If you wish to change the location of these auto generated feeds (`/feed/by_tag/<TAG>.xml` by default) you can provide an alternative folder for them to live in.
+If you wish to change the location of these auto generated feeds (`/feed/by_tag/%{tag}.xml` by default) you can provide an alternative folder for them to live in.
 
 ```yml
 feed:

@@ -665,6 +665,28 @@ describe(JekyllFeed) do
           expect(Pathname.new(dest_dir("questionable/path/success.xml"))).to exist
         end
       end
+
+      context "set to templated path" do
+        let(:overrides) do
+          {
+            "feed" => {
+              "tags" => {
+                "path" => "templated/path/%{tag}/feed.xml" # rubocop:disable Style/FormatStringToken
+              },
+            },
+          }
+        end
+
+        it "should write feeds to sane paths" do
+          expect(Pathname.new(dest_dir("feed/by_tag/test.xml"))).to_not exist
+          expect(Pathname.new(dest_dir("feed/by_tag/fail.xml"))).to_not exist
+          expect(Pathname.new(dest_dir("feed/by_tag/success.xml"))).to_not exist
+
+          expect(Pathname.new(dest_dir("templated/path/test/feed.xml"))).to exist
+          expect(Pathname.new(dest_dir("templated/path/fail/feed.xml"))).to exist
+          expect(Pathname.new(dest_dir("templated/path/success/feed.xml"))).to exist
+        end
+      end
     end
   end
 

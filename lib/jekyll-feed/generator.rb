@@ -82,7 +82,7 @@ module JekyllFeed
       except    = tags_config["except"] || []
       only      = tags_config["only"] || @site.tags.keys
       tags_pool = only - except
-      tags_path = tags_config["path"] || "/feed/by_tag/"
+      tags_path = tags_config["path"] || "/feed/by_tag/%{tag}.xml" # rubocop:disable Style/FormatStringToken
 
       generate_tag_feed(tags_pool, tags_path)
     end
@@ -94,7 +94,11 @@ module JekyllFeed
         next if %r![^a-zA-Z0-9_]!.match?(tag)
 
         Jekyll.logger.info "Jekyll Feed:", "Generating feed for posts tagged #{tag}"
-        path = "#{tags_path}#{tag}.xml"
+        path = if tags_path.include?("%{tag}") # rubocop:disable Style/FormatStringToken
+                 format(tags_path, :tag => tag)
+               else
+                 "#{tags_path}#{tag}.xml" # backwards compatibility for custom paths
+               end
         next if file_exists?(path)
 
         @site.pages << make_page(path, :tags => tag)
